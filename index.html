@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Metronom Films — Alexandru Belc</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0a;
+  --surface: #111111;
+  --surface2: #161616;
+  --border: #222222;
+  --border-soft: #1a1a1a;
+  --text: #e8e8e8;
+  --text-muted: #888888;
+  --text-dim: #555555;
+  --accent: #c9a96e;
+  --courier: 'JetBrains Mono', 'Courier New', monospace;
+  --serif: 'Libre Baskerville', Georgia, serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: var(--courier); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+::selection { background: var(--accent); color: var(--bg); }
+
+/* Nav */
+nav {
+  position: fixed; top: 0; width: 100%; z-index: 100;
+  padding: 18px 48px; display: flex; justify-content: space-between; align-items: center;
+  background: rgba(10,10,10,0.85); backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(34,34,34,0.5);
+}
+.brand { display: flex; align-items: center; gap: 14px; }
+.brand-mark {
+  width: 24px; height: 24px;
+  border: 1px solid var(--accent);
+  position: relative; flex-shrink: 0;
+}
+.brand-mark::after {
+  content: ''; position: absolute; top: 50%; left: 0; right: 0;
+  border-top: 1px solid var(--accent);
+}
+.brand-mark::before {
+  content: ''; position: absolute; left: 50%; top: 0; bottom: 0;
+  border-left: 1px solid var(--accent);
+}
+.brand-text {
+  font-size: 11px; font-weight: 500; letter-spacing: 3px;
+  color: var(--text-muted); text-transform: uppercase;
+}
+.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links a {
+  color: var(--text-dim); text-decoration: none;
+  font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--text); }
+
+/* Hero */
+.hero {
+  min-height: 100vh; padding: 140px 48px 80px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  position: relative;
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background:
+    linear-gradient(180deg, transparent 0%, rgba(10,10,10,0.4) 100%),
+    radial-gradient(ellipse 800px 600px at 80% 30%, rgba(201,169,110,0.025) 0%, transparent 70%);
+  pointer-events: none; z-index: 0;
+}
+.hero-content { position: relative; z-index: 1; max-width: 1100px; }
+.hero-meta {
+  display: flex; gap: 24px; margin-bottom: 48px;
+  font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--text-dim);
+}
+.hero-meta span:first-child { color: var(--accent); }
+.hero h1 {
+  font-family: var(--serif); font-size: clamp(48px, 7vw, 96px);
+  font-weight: 400; line-height: 1.05; letter-spacing: -2px;
+  margin-bottom: 32px;
+}
+.hero h1 em { font-style: italic; color: var(--accent); display: block; margin-top: 8px; }
+.hero-tagline {
+  font-size: 14px; line-height: 1.9; color: var(--text-muted);
+  max-width: 520px; margin-bottom: 48px;
+}
+.hero-tagline strong { color: var(--text); font-weight: 500; }
+.hero-bottom {
+  position: relative; z-index: 1;
+  display: flex; justify-content: space-between; align-items: flex-end;
+  margin-top: 80px; padding-top: 32px;
+  border-top: 1px solid var(--border-soft);
+}
+.hero-bottom-left { font-size: 11px; color: var(--text-muted); line-height: 1.7; }
+.hero-bottom-left strong { color: var(--text); font-weight: 500; }
+.hero-scroll {
+  font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--text-dim);
+  writing-mode: vertical-rl; transform: rotate(180deg);
+}
+
+/* Section header */
+.section-header {
+  display: flex; align-items: baseline; gap: 16px;
+  margin-bottom: 56px; padding-bottom: 24px;
+  border-bottom: 1px solid var(--border-soft);
+}
+.section-num {
+  font-size: 10px; letter-spacing: 2px; color: var(--accent);
+  font-weight: 500;
+}
+.section-title {
+  font-family: var(--serif); font-size: 28px; font-weight: 400;
+  letter-spacing: -0.5px;
+}
+.section-meta {
+  margin-left: auto;
+  font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+/* About / Director — single column, no portrait */
+.about { padding: 100px 48px; max-width: 760px; margin: 0 auto; }
+.about p {
+  font-size: 14px; line-height: 2; color: var(--text-muted); margin-bottom: 22px;
+}
+.about p strong { color: var(--text); font-weight: 500; }
+.about p em {
+  font-style: italic; color: var(--accent); font-family: var(--serif); font-weight: 400;
+}
+.about-detail {
+  margin-top: 56px; padding-top: 40px;
+  border-top: 1px solid var(--border-soft);
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px;
+}
+.about-detail .item-key {
+  font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--text-dim); margin-bottom: 8px;
+}
+.about-detail .item-val { font-size: 12px; color: var(--text); line-height: 1.7; }
+
+/* Featured (current project) — full bleed with hero image */
+.featured-wrap {
+  border-top: 1px solid var(--border-soft);
+  padding: 100px 0 0;
+}
+.featured-header-inner {
+  max-width: 1100px; margin: 0 auto; padding: 0 48px;
+}
+.featured-hero {
+  position: relative; margin-top: 56px;
+  height: 60vh; min-height: 480px; max-height: 640px;
+  overflow: hidden; background: var(--surface);
+}
+.featured-hero img {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover;
+  filter: brightness(0.55) contrast(1.05) sepia(0.15);
+  mix-blend-mode: normal;
+}
+.featured-hero::after {
+  content: ''; position: absolute; inset: 0;
+  background:
+    linear-gradient(180deg, rgba(10,10,10,0.4) 0%, transparent 30%, transparent 60%, rgba(10,10,10,0.95) 100%),
+    linear-gradient(90deg, rgba(10,10,10,0.7) 0%, transparent 50%);
+  pointer-events: none;
+}
+.featured-hero-content {
+  position: absolute; left: 48px; right: 48px; bottom: 48px;
+  z-index: 2;
+}
+.featured-status {
+  display: inline-block; padding: 4px 10px;
+  background: rgba(201,169,110,0.12); border: 1px solid rgba(201,169,110,0.4);
+  font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 20px;
+}
+.featured-title {
+  font-family: var(--serif); font-size: clamp(36px, 5vw, 56px);
+  font-weight: 400; font-style: italic; letter-spacing: -1px;
+  color: var(--text); margin-bottom: 12px;
+  text-shadow: 0 2px 30px rgba(0,0,0,0.5);
+}
+.featured-based {
+  font-size: 11px; color: var(--text-muted); letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.featured-body {
+  padding: 80px 48px; max-width: 1100px; margin: 0 auto;
+}
+.featured-body p {
+  font-size: 13px; line-height: 1.9; color: var(--text-muted);
+  max-width: 720px; margin-bottom: 18px;
+}
+.featured-body p strong { color: var(--text); font-weight: 500; }
+.featured-meta {
+  margin-top: 56px; padding-top: 32px;
+  border-top: 1px solid var(--border-soft);
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
+}
+.featured-meta .item-key {
+  font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--text-dim); margin-bottom: 6px;
+}
+.featured-meta .item-val { font-size: 12px; color: var(--text); line-height: 1.6; }
+
+/* Moodboard gallery */
+.moodboard {
+  background: #050505;
+  padding: 100px 0;
+  border-top: 1px solid var(--border-soft);
+  border-bottom: 1px solid var(--border-soft);
+}
+.moodboard-header-inner {
+  max-width: 1100px; margin: 0 auto; padding: 0 48px;
+}
+.moodboard-label {
+  font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 12px;
+}
+.moodboard-title {
+  font-family: var(--serif); font-style: italic;
+  font-size: 22px; font-weight: 400; color: var(--text);
+  margin-bottom: 8px;
+}
+.moodboard-credit {
+  font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--text-dim); margin-bottom: 64px;
+}
+.moodboard-grid {
+  max-width: 1300px; margin: 0 auto; padding: 0 32px;
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.mb-img {
+  position: relative; overflow: hidden;
+  background: var(--surface); border: 1px solid var(--border);
+  aspect-ratio: 4/3;
+}
+.mb-img img {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: brightness(0.78) contrast(1.05) sepia(0.08);
+  opacity: 0.78;
+  transition: opacity 0.5s ease, filter 0.5s ease, transform 0.6s ease;
+}
+.mb-img:hover img {
+  opacity: 1;
+  filter: brightness(0.95) contrast(1.1) sepia(0.05);
+  transform: scale(1.02);
+}
+.mb-img::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(10,10,10,0.05) 0%, rgba(10,10,10,0.25) 100%);
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+.mb-img:hover::after { opacity: 0.5; }
+
+/* Filmography */
+.filmography {
+  padding: 100px 48px; max-width: 1100px; margin: 0 auto;
+}
+.film-list { display: flex; flex-direction: column; }
+.film {
+  display: grid; grid-template-columns: 80px 1fr auto;
+  gap: 32px; padding: 28px 0;
+  border-bottom: 1px solid var(--border-soft);
+  align-items: center; transition: padding-left 0.3s;
+  cursor: default;
+}
+.film:hover { padding-left: 16px; }
+.film:hover .film-title { color: var(--text); }
+.film:hover .film-year { color: var(--accent); }
+.film-year {
+  font-size: 13px; color: var(--text-dim); font-weight: 500;
+  letter-spacing: 1px; transition: color 0.2s;
+}
+.film-info {}
+.film-title {
+  font-family: var(--serif); font-size: 22px; font-style: italic;
+  font-weight: 400; color: var(--text-muted); margin-bottom: 6px;
+  transition: color 0.2s;
+}
+.film-meta {
+  font-size: 10px; color: var(--text-dim); letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+.film-awards {
+  font-size: 10px; color: var(--accent); letter-spacing: 1px;
+  text-align: right; line-height: 1.7; max-width: 280px;
+}
+
+/* Persona section */
+.persona-feature {
+  padding: 100px 48px; max-width: 1100px; margin: 0 auto;
+  border-top: 1px solid var(--border-soft);
+}
+.persona-card {
+  display: grid; grid-template-columns: 1.2fr 1fr;
+  gap: 56px; align-items: center;
+}
+.persona-info .featured-status { background: rgba(201,169,110,0.08); }
+.persona-info h3 {
+  font-family: var(--serif); font-size: 38px; font-weight: 400;
+  letter-spacing: -1px; margin-bottom: 8px;
+}
+.persona-info .subtitle {
+  font-style: italic; color: var(--accent); font-family: var(--serif);
+  font-size: 16px; margin-bottom: 28px;
+}
+.persona-info p {
+  font-size: 13px; line-height: 1.9; color: var(--text-muted);
+  margin-bottom: 18px;
+}
+.persona-info p strong { color: var(--text); font-weight: 500; }
+.persona-info .actions {
+  display: flex; gap: 14px; margin-top: 32px;
+}
+.btn {
+  padding: 11px 24px; font-family: var(--courier);
+  font-size: 10px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase;
+  text-decoration: none; cursor: pointer; transition: all 0.2s;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.btn-primary { background: var(--accent); color: var(--bg); border: 1px solid var(--accent); }
+.btn-primary:hover { background: transparent; color: var(--accent); }
+.btn-ghost { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
+.btn-ghost:hover { border-color: var(--text-muted); color: var(--text); }
+
+.persona-visual {
+  background: var(--surface); border: 1px solid var(--border);
+  padding: 40px 32px; text-align: center;
+  position: relative;
+}
+.persona-visual::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 200px 200px at 50% 20%, rgba(201,169,110,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.persona-icon-display {
+  width: 84px; height: 84px; border-radius: 19px;
+  margin: 0 auto 24px; display: block;
+  position: relative; z-index: 1;
+}
+.persona-tagline {
+  font-family: var(--serif); font-size: 20px; font-style: italic;
+  color: var(--text); margin-bottom: 6px; position: relative;
+}
+.persona-sub {
+  font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--text-dim); margin-bottom: 32px;
+}
+.persona-features-mini {
+  display: flex; flex-direction: column; gap: 10px;
+  text-align: left; margin-top: 24px; padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+.persona-features-mini .pf {
+  display: flex; gap: 12px; align-items: baseline;
+  font-size: 11px; color: var(--text-muted);
+}
+.persona-features-mini .pf-num {
+  font-size: 9px; color: var(--accent); letter-spacing: 1px; min-width: 24px;
+}
+
+/* Contact */
+.contact {
+  padding: 120px 48px 80px;
+  border-top: 1px solid var(--border-soft);
+}
+.contact-inner { max-width: 1100px; margin: 0 auto; }
+.contact h2 {
+  font-family: var(--serif); font-size: 56px; font-weight: 400;
+  letter-spacing: -1.5px; line-height: 1.1; margin-bottom: 40px; max-width: 700px;
+}
+.contact h2 em { font-style: italic; color: var(--accent); }
+.contact-grid {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 48px; margin-top: 64px; padding-top: 48px;
+  border-top: 1px solid var(--border-soft);
+}
+.contact-block .label {
+  font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--text-dim); margin-bottom: 12px;
+}
+.contact-block .value {
+  font-size: 13px; color: var(--text); line-height: 1.7;
+}
+.contact-block .value a {
+  color: var(--text); text-decoration: none;
+  border-bottom: 1px solid var(--text-dim); padding-bottom: 1px;
+  transition: border-color 0.2s, color 0.2s;
+}
+.contact-block .value a:hover { color: var(--accent); border-color: var(--accent); }
+
+/* Footer */
+footer {
+  padding: 32px 48px; border-top: 1px solid var(--border-soft);
+  display: flex; justify-content: space-between; align-items: center;
+}
+footer .fl { font-size: 9px; color: var(--text-dim); letter-spacing: 2px; text-transform: uppercase; }
+footer .fr { display: flex; gap: 24px; }
+footer .fr a {
+  font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--text-dim); text-decoration: none; transition: color 0.2s;
+}
+footer .fr a:hover { color: var(--text); }
+
+/* Mobile */
+@media (max-width: 900px) {
+  nav { padding: 14px 24px; }
+  .nav-links { gap: 18px; }
+  .hero { padding: 110px 24px 60px; }
+  .hero h1 { font-size: 42px; }
+  .about { padding: 70px 24px; }
+  .featured-header-inner { padding: 0 24px; }
+  .featured-hero-content { left: 24px; right: 24px; bottom: 32px; }
+  .featured-body { padding: 60px 24px; }
+  .featured-meta { grid-template-columns: 1fr 1fr; }
+  .moodboard { padding: 70px 0; }
+  .moodboard-header-inner { padding: 0 24px; }
+  .moodboard-grid { grid-template-columns: repeat(2, 1fr); padding: 0 16px; gap: 12px; }
+  .filmography, .persona-feature, .contact { padding: 70px 24px; }
+  .film { grid-template-columns: 60px 1fr; gap: 16px; padding: 20px 0; }
+  .film-awards { display: none; }
+  .film-title { font-size: 18px; }
+  .persona-card { grid-template-columns: 1fr; gap: 32px; }
+  .contact h2 { font-size: 36px; }
+  .contact-grid { grid-template-columns: 1fr; gap: 32px; }
+  footer { flex-direction: column; gap: 14px; align-items: flex-start; padding: 24px; }
+  .hero-scroll { display: none; }
+  .hero-bottom { flex-direction: column; gap: 24px; align-items: flex-start; }
+  .about-detail { grid-template-columns: 1fr; gap: 16px; }
+}
+
+/* Subtle grain */
+body::after {
+  content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 200;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  mix-blend-mode: overlay;
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand">
+    <span class="brand-text">Metronom Films</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#about">Alexandru</a></li>
+    <li><a href="#patricia">Patricia</a></li>
+    <li><a href="#current">Current</a></li>
+    <li><a href="#films">Films</a></li>
+    <li><a href="#persona">Persona</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-meta">
+      <span>EST. 2018</span>
+      <span>Bucharest, Romania</span>
+      <span>Feature films · documentaries</span>
+    </div>
+    <h1>
+      Metronom Films
+    </h1>
+    <p class="hero-tagline">
+      An independent Bucharest-based production company focused on <strong>feature films and documentaries</strong>. Founded by filmmaker Alexandru Belc and editor-producer Patricia Belc, Metronom develops projects rooted in Romanian history, memory, and the lives of ordinary people caught in extraordinary times.
+    </p>
+  </div>
+  <div class="hero-bottom">
+    <div class="hero-bottom-left">
+      <strong>Currently in development</strong> — <em>Between Day and Night</em>, a Romanian-French co-production with Midralgar (FR), adapted from Henriette Yvonne Stahl's novel.
+    </div>
+    <div class="hero-scroll">SCROLL ↓</div>
+  </div>
+</section>
+
+<!-- ALEXANDRU BELC -->
+<section class="about" id="about">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Alexandru Belc</h2>
+    <span class="section-meta">Director · Co-founder</span>
+  </div>
+  <p>
+    Alexandru Belc is a Romanian filmmaker working between fiction and documentary. A graduate of the National University of Theatre and Film "I.L. Caragiale" in Bucharest, he began his career as assistant director on films by Cristian Mungiu, Corneliu Porumboiu, and Alexander Nanau.
+  </p>
+  <p>
+    His feature documentaries <em>8 Martie</em> (2012) and <em>Cinema mon amour</em> (2015) screened at TIFF, Sarajevo, Edinburgh, and Sydney film festivals, with the latter winning the Cinema Warrior award at Trieste.
+  </p>
+  <p>
+    In 2022, his fiction feature debut <em>Metronom</em> won the <strong>Best Director award in the Un Certain Regard section at the Cannes Film Festival</strong>, followed by Best Film prizes at Gijón, Pessac, and Jerusalem International Film Festivals.
+  </p>
+  <p>
+    He is co-founder, along with Patricia Belc, of Metronom Films, where he develops and directs his current projects.
+  </p>
+  <div class="about-detail">
+    <div>
+      <div class="item-key">Education</div>
+      <div class="item-val">UNATC — Film Directing (2007)<br>University of Bucharest — Political Science MA (2012)</div>
+    </div>
+    <div>
+      <div class="item-key">Selected awards</div>
+      <div class="item-val">Best Director, Cannes Un Certain Regard, 2022<br>Critics Award, D'A Barcelona, 2022<br>Best Film, Jerusalem IFF, 2022</div>
+    </div>
+  </div>
+</section>
+
+<!-- PATRICIA BELC -->
+<section class="about" id="patricia" style="border-top: 1px solid var(--border-soft);">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Patricia Belc</h2>
+    <span class="section-meta">Editor · Producer · Co-founder</span>
+  </div>
+  <p>
+    Patricia Belc is a Romanian film editor and producer, born in Bucharest in 1992. A graduate of the Bucharest Film Academy (Editing and Sound Department, 2014), she has collaborated as editor with directors including Nae Caranfil, Ivana Mladenovic, Iulia Rugină, and Radu Jude.
+  </p>
+  <p>
+    Her feature debut as editor, <em>Ivana the Terrible</em> (2019, dir. Ivana Mladenovic), won the <strong>Special Jury Prize — Filmmakers of the Present at the Locarno International Film Festival</strong> and the Golden Pram for Best Feature Film at Zagreb IFF.
+  </p>
+  <p>
+    She edited <em>Metronom</em> (2022, dir. Alexandru Belc), winner of the Best Director award at Cannes Un Certain Regard.
+  </p>
+  <p>
+    As co-founder and producer at Metronom Films, she leads the production of <em>Between Day and Night</em>, the company's first fiction feature, in co-production with Midralgar (France).
+  </p>
+  <div class="about-detail">
+    <div>
+      <div class="item-key">Education</div>
+      <div class="item-val">Bucharest Film Academy — Editing & Sound (2014)</div>
+    </div>
+    <div>
+      <div class="item-key">Selected works as editor</div>
+      <div class="item-val">Metronom (2022, Alexandru Belc)<br>Ivana the Terrible (2019, Ivana Mladenovic)<br>Locarno Special Jury Prize</div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED PROJECT -->
+<section class="featured-wrap" id="current">
+  <div class="featured-header-inner">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2 class="section-title">Current Project</h2>
+      <span class="section-meta">In development</span>
+    </div>
+  </div>
+
+  <!-- Hero image -->
+  <div class="featured-hero">
+    <img src="bdan/BDN_MoodBoard_7-80.jpg" alt="Between Day and Night — landscape">
+    <div class="featured-hero-content">
+      <span class="featured-status">●  In development</span>
+      <h3 class="featured-title">Between Day and Night</h3>
+      <p class="featured-based">Adapted from the novel by Henriette Yvonne Stahl</p>
+    </div>
+  </div>
+
+  <!-- Body -->
+  <div class="featured-body">
+    <p>
+      Bucharest, 1916. As the German army marches on the capital, two young women — Ana, frail and searching for her place in the world; Marta, an aristocrat haunted by morphine and a hidden past — are forced to flee. They take the road of exile to Iași, joining the king, the government, and a fractured country in retreat.
+    </p>
+    <p>
+      What begins as escape becomes a journey of social descent, memory, and survival. The film moves the source novel out of its enclosed urban interiors and onto the road — <strong>a neo-western in winter light</strong>, where the war is heard but rarely seen, and history pressures the lives of two women who began this story belonging, and end it belonging to no one.
+    </p>
+    <div class="featured-meta">
+      <div>
+        <div class="item-key">Director</div>
+        <div class="item-val">Alexandru Belc</div>
+      </div>
+      <div>
+        <div class="item-key">Production</div>
+        <div class="item-val">Metronom Films (RO)<br>Midralgar (FR)</div>
+      </div>
+      <div>
+        <div class="item-key">Genre</div>
+        <div class="item-val">Drama · Neo-western</div>
+      </div>
+      <div>
+        <div class="item-key">Status</div>
+        <div class="item-val">Screenplay development</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MOODBOARD -->
+<section class="moodboard">
+  <div class="moodboard-header-inner">
+    <div class="moodboard-label">— Visual approach</div>
+    <h3 class="moodboard-title">Between Day and Night — moodboard</h3>
+    <p class="moodboard-credit">Reference sketches · 1916, on the road from Bucharest to Iași</p>
+  </div>
+
+  <div class="moodboard-grid">
+    <div class="mb-img"><img src="bdan/BDN_MoodBoard_7-80.jpg" alt="Cart on the horizon"></div>
+    <div class="mb-img"><img src="bdan/BDN_MoodBoard_8-81.jpg" alt="Road, fallen horses"></div>
+    <div class="mb-img"><img src="bdan/BDN_MoodBoard_3-79.jpg" alt="Marta, packing"></div>
+    <div class="mb-img"><img src="bdan/BDN_MoodBoard_1-77.jpg" alt="Salon, wheelchair"></div>
+    <div class="mb-img"><img src="bdan/BDN_MoodBoard_2-78.jpg" alt="Field hospital"></div>
+    <div class="mb-img"><img src="bdan/BDN_MoodBoard_9-84.jpg" alt="Abandoned house"></div>
+    <div class="mb-img"><img src="bdan/BDN_MoodBoard_10-85.jpg" alt="Reference"></div>
+    <div class="mb-img"><img src="bdan/BDN_MoodBoard_11-82.jpg" alt="Reference"></div>
+    <div class="mb-img"><img src="bdan/BDN_MoodBoard_12-83.jpg" alt="Reference"></div>
+  </div>
+</section>
+
+<!-- FILMOGRAPHY -->
+<section class="filmography" id="films">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Filmography</h2>
+    <span class="section-meta">Selected works</span>
+  </div>
+  <div class="film-list">
+
+    <div class="film">
+      <div class="film-year">2022</div>
+      <div class="film-info">
+        <div class="film-title">Metronom</div>
+        <div class="film-meta">Feature debut · Romania / France · 102 min</div>
+      </div>
+      <div class="film-awards">
+        ★ Cannes Un Certain Regard — Best Director<br>
+        ★ Jerusalem IFF — Best Film<br>
+        ★ Gijón IFF — Best Film
+      </div>
+    </div>
+
+    <div class="film">
+      <div class="film-year">2015</div>
+      <div class="film-info">
+        <div class="film-title">Cinema mon amour</div>
+        <div class="film-meta">Feature documentary · Romania / Czech Republic · 70 min</div>
+      </div>
+      <div class="film-awards">
+        ★ Trieste FF — Cinema Warrior Award<br>
+        ★ La Rochelle — Special Mention<br>
+        Sarajevo · Edinburgh · Sydney
+      </div>
+    </div>
+
+    <div class="film">
+      <div class="film-year">2012</div>
+      <div class="film-info">
+        <div class="film-title">8 Martie</div>
+        <div class="film-meta">Feature documentary · Romania · 65 min</div>
+      </div>
+      <div class="film-awards">
+        ★ Mediawaves — Best Documentary<br>
+        ★ Szolnok IFF — Best Documentary<br>
+        Jihlava — Silver Eye nominee
+      </div>
+    </div>
+
+    <div class="film">
+      <div class="film-year">2009</div>
+      <div class="film-info">
+        <div class="film-title">Rebel Rebel</div>
+        <div class="film-meta">Short documentary · Aristoteles Workshop</div>
+      </div>
+      <div class="film-awards">
+        Visions du Réel — First Steps<br>
+        TIFF Romanian Days
+      </div>
+    </div>
+
+    <div class="film">
+      <div class="film-year">2007</div>
+      <div class="film-info">
+        <div class="film-title">The Sound of Mountains</div>
+        <div class="film-meta">Short documentary</div>
+      </div>
+      <div class="film-awards">
+        Berlinale International Film Festival
+      </div>
+    </div>
+
+    <div class="film">
+      <div class="film-year">2003</div>
+      <div class="film-info">
+        <div class="film-title">Second Hand</div>
+        <div class="film-meta">Short documentary · HFF München</div>
+      </div>
+      <div class="film-awards">
+        Karlovy Vary — Balkan Panorama<br>
+        Cinemaiubit IFF
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PERSONA -->
+<section class="persona-feature" id="persona">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2 class="section-title">Persona</h2>
+    <span class="section-meta">A side project · Software</span>
+  </div>
+  <div class="persona-card">
+    <div class="persona-info">
+      <span class="featured-status">●  Available on the App Store · macOS & iPadOS</span>
+      <h3>Persona</h3>
+      <div class="subtitle">A screenplay editor, by a filmmaker.</div>
+      <p>
+        Persona was built out of frustration. Final Draft is the industry standard for production, and rightly so — but when you're at an empty page at 2 AM, you don't need production tools. You need <strong>speed</strong>.
+      </p>
+      <p>
+        A native macOS and iPadOS app for writing screenplays at the pace of thought. Auto-formatting that stays out of the way. Full FDX import and export. A reading mode with annotations that go directly to Apple Notes. No subscription.
+      </p>
+      <p>
+        Write in Persona. <strong>Move to Final Draft when production calls.</strong>
+      </p>
+      <div class="actions">
+        <a href="persona-landing.html" class="btn btn-primary">Visit Persona →</a>
+      </div>
+    </div>
+
+    <div class="persona-visual">
+      <img src="persona-icon.png" alt="Persona" class="persona-icon-display">
+      <div class="persona-tagline">Write first.</div>
+      <div class="persona-sub">Format later.</div>
+      <div class="persona-features-mini">
+        <div class="pf"><span class="pf-num">01</span><span>Native macOS & iPadOS</span></div>
+        <div class="pf"><span class="pf-num">02</span><span>Full Final Draft FDX compatibility</span></div>
+        <div class="pf"><span class="pf-num">03</span><span>Reader Mode with annotations</span></div>
+        <div class="pf"><span class="pf-num">04</span><span>$9.99 intro · $19.99 universal</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="contact-inner">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <h2 class="section-title">Contact</h2>
+      <span class="section-meta">For projects · co-productions · press</span>
+    </div>
+    <div class="contact-grid" style="grid-template-columns: 1fr 1fr;">
+      <div class="contact-block">
+        <div class="label">Director</div>
+        <div class="value">
+          Alexandru Belc<br>
+          <a href="mailto:alex@metronomfilms.com">alex@metronomfilms.com</a>
+        </div>
+      </div>
+      <div class="contact-block">
+        <div class="label">Producer</div>
+        <div class="value">
+          Patricia Belc<br>
+          <a href="mailto:patricia@metronomfilms.com">patricia@metronomfilms.com</a>
+        </div>
+      </div>
+    </div>
+    <div class="contact-grid" style="margin-top: 32px; padding-top: 32px;">
+      <div class="contact-block">
+        <div class="label">Address</div>
+        <div class="value">Bucharest, Romania</div>
+      </div>
+      <div class="contact-block">
+        <div class="label">Established</div>
+        <div class="value">2018</div>
+      </div>
+      <div class="contact-block">
+        <div class="label">Focus</div>
+        <div class="value">Feature films · Documentaries</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="fl">© 2026 Metronom Films · All rights reserved</div>
+  <div class="fr">
+    <a href="https://www.imdb.com/name/nm2764487/?ref_=fn_t_1" target="_blank">IMDb</a>
+    <a href="#">Vimeo</a>
+    <a href="persona-landing.html">Persona</a>
+  </div>
+</footer>
+
+</body>
+</html>

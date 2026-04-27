@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Persona — Write First. Format Later.</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #09090b; --surface: #111113; --surface2: #18181b;
+  --border: #27272a; --text: #e4e4e7; --text-muted: #71717a;
+  --text-dim: #52525b; --accent: #f59e0b;
+  --courier: 'JetBrains Mono', 'Courier New', monospace;
+  --serif: 'Libre Baskerville', Georgia, serif;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: var(--courier); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+::selection { background: var(--accent); color: var(--bg); }
+
+/* Nav */
+nav { position: fixed; top: 0; width: 100%; z-index: 100; padding: 14px 40px; display: flex; justify-content: space-between; align-items: center; background: rgba(9,9,11,0.88); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(39,39,42,0.4); }
+nav .logo { display: flex; align-items: center; gap: 10px; }
+nav .logo img { width: 28px; height: 28px; border-radius: 6px; }
+nav .logo-text { font-size: 13px; font-weight: 500; letter-spacing: 2px; color: var(--text-muted); }
+nav .nav-links { display: flex; gap: 28px; list-style: none; align-items: center; }
+nav .nav-links a { color: var(--text-dim); text-decoration: none; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; transition: color 0.2s; }
+nav .nav-links a:hover { color: var(--text); }
+
+.btn { display: inline-block; padding: 10px 24px; font-family: var(--courier); font-size: 11px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; text-decoration: none; border: none; cursor: pointer; transition: all 0.2s; }
+.btn-primary { background: var(--accent); color: var(--bg); }
+.btn-primary:hover { background: #fbbf24; transform: translateY(-1px); }
+.btn-ghost { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
+.btn-ghost:hover { border-color: var(--text-dim); color: var(--text); }
+
+/* Hero */
+.hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 120px 40px 80px; position: relative; text-align: center; }
+.hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 600px 400px at 50% 38%, rgba(245,158,11,0.025) 0%, transparent 70%); pointer-events: none; }
+
+.hero-icon { width: 80px; height: 80px; border-radius: 18px; margin-bottom: 28px; opacity: 0; animation: fadeUp 0.6s ease 0.15s forwards; }
+
+.hero h1 { font-family: var(--serif); font-size: clamp(38px, 5.5vw, 64px); font-weight: 400; line-height: 1.2; letter-spacing: -0.5px; margin-bottom: 24px; opacity: 0; animation: fadeUp 0.6s ease 0.3s forwards; }
+.hero h1 em { font-style: italic; color: var(--accent); }
+
+.hero-sub { font-size: 14px; line-height: 1.9; color: var(--text-muted); max-width: 500px; margin-bottom: 40px; opacity: 0; animation: fadeUp 0.6s ease 0.45s forwards; }
+
+.hero-actions { display: flex; gap: 14px; align-items: center; margin-bottom: 20px; opacity: 0; animation: fadeUp 0.6s ease 0.6s forwards; }
+
+.hero-price { font-size: 12px; color: var(--text-dim); margin-bottom: 8px; opacity: 0; animation: fadeUp 0.6s ease 0.7s forwards; }
+.hero-price .price-old { text-decoration: line-through; color: var(--text-dim); }
+.hero-price .price-new { color: var(--accent); font-weight: 500; }
+
+.hero-meta { font-size: 10px; color: var(--text-dim); letter-spacing: 2px; text-transform: uppercase; opacity: 0; animation: fadeUp 0.6s ease 0.8s forwards; }
+
+/* Flow section */
+.flow { padding: 100px 40px; max-width: 720px; margin: 0 auto; border-top: 1px solid var(--border); }
+.flow h2 { font-family: var(--serif); font-size: 26px; font-weight: 400; line-height: 1.45; margin-bottom: 32px; }
+.flow p { font-size: 13px; line-height: 2; color: var(--text-muted); margin-bottom: 20px; }
+.flow p strong { color: var(--text); font-weight: 500; }
+
+.flow-diagram { display: flex; align-items: center; justify-content: center; gap: 0; margin: 48px 0; flex-wrap: wrap; }
+.flow-step { text-align: center; padding: 20px 24px; }
+.flow-step-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 8px; }
+.flow-step-name { font-size: 15px; font-weight: 500; color: var(--text); }
+.flow-step-name.accent { color: var(--accent); }
+.flow-arrow { color: var(--text-dim); font-size: 18px; padding: 0 8px; }
+
+/* Preview */
+.preview-section { padding: 40px 40px 80px; display: flex; justify-content: center; }
+.sp { width: 100%; max-width: 620px; background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 44px 52px; font-family: var(--courier); font-size: 12px; line-height: 1.5; color: var(--text-muted); position: relative; }
+.sp .sp-label { position: absolute; top: 12px; right: 18px; font-size: 9px; color: var(--text-dim); letter-spacing: 2px; text-transform: uppercase; }
+.sp .slug { text-transform: uppercase; font-weight: 500; color: var(--text); margin-bottom: 12px; }
+.sp .action { margin-bottom: 16px; max-width: 400px; }
+.sp .char { text-align: center; text-transform: uppercase; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+.sp .dial { text-align: center; max-width: 260px; margin: 0 auto 16px; }
+.sp .hl { background: rgba(245,158,11,0.15); padding: 1px 2px; }
+.cursor { display: inline-block; width: 1px; height: 14px; background: var(--accent); margin-left: 2px; animation: blink 1s step-end infinite; vertical-align: text-bottom; }
+
+/* Features */
+.features { padding: 80px 40px 100px; max-width: 1000px; margin: 0 auto; border-top: 1px solid var(--border); }
+.features-hdr { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 48px; }
+.fg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); }
+.f { background: var(--bg); padding: 32px 28px; }
+.f-lab { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; font-weight: 500; }
+.f h3 { font-family: var(--serif); font-size: 16px; font-weight: 400; margin-bottom: 10px; }
+.f p { font-size: 11px; line-height: 1.8; color: var(--text-dim); }
+
+/* Reader */
+.reader { padding: 100px 40px; max-width: 680px; margin: 0 auto; border-top: 1px solid var(--border); }
+.reader h2 { font-family: var(--serif); font-size: 26px; font-weight: 400; margin-bottom: 28px; }
+.reader p { font-size: 13px; line-height: 2; color: var(--text-muted); margin-bottom: 20px; }
+.reader p strong { color: var(--text); font-weight: 500; }
+.chips { display: flex; gap: 10px; margin: 28px 0; flex-wrap: wrap; }
+.chip { padding: 5px 13px; border-radius: 2px; font-size: 11px; color: var(--bg); font-weight: 500; }
+.chip.y { background: rgba(245,158,11,0.7); } .chip.g { background: rgba(74,222,128,0.6); }
+.chip.b { background: rgba(96,165,250,0.6); } .chip.pk { background: rgba(244,114,182,0.6); }
+.chip.pr { background: rgba(167,139,250,0.6); }
+
+
+/* Specs */
+.specs { padding: 80px 40px 100px; max-width: 680px; margin: 0 auto; border-top: 1px solid var(--border); }
+.specs-hdr { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 40px; }
+.sl { display: grid; grid-template-columns: 1fr 1fr; }
+.si { padding: 16px 0; border-bottom: 1px solid var(--border); }
+.si:nth-child(odd) { padding-right: 28px; } .si:nth-child(even) { padding-left: 28px; border-left: 1px solid var(--border); }
+.sk { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 4px; }
+.sv { font-size: 13px; color: var(--text); }
+
+/* CTA */
+.cta-final { padding: 120px 40px; text-align: center; border-top: 1px solid var(--border); position: relative; }
+.cta-final::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 500px 300px at 50% 50%, rgba(245,158,11,0.035) 0%, transparent 70%); pointer-events: none; }
+.cta-final .cta-icon { width: 56px; height: 56px; border-radius: 14px; margin-bottom: 24px; }
+.cta-final h2 { font-family: var(--serif); font-size: 30px; font-weight: 400; margin-bottom: 12px; }
+.cta-final p { font-size: 13px; color: var(--text-muted); margin-bottom: 8px; }
+.cta-final .price-line { font-size: 14px; color: var(--text); margin-bottom: 32px; }
+.cta-final .price-line .old { text-decoration: line-through; color: var(--text-dim); margin-right: 8px; }
+.cta-final .price-line .new { color: var(--accent); font-weight: 500; font-size: 18px; }
+.cta-final .acts { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+footer { padding: 36px 40px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+footer .fl { font-size: 10px; color: var(--text-dim); letter-spacing: 1px; }
+footer .fr { display: flex; gap: 24px; }
+footer a { color: var(--text-dim); text-decoration: none; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; transition: color 0.2s; }
+footer a:hover { color: var(--text-muted); }
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes blink { 50% { opacity: 0; } }
+
+@media (max-width: 768px) {
+  nav { padding: 12px 20px; } nav .nav-links { gap: 16px; }
+  .hero { padding: 100px 24px 60px; } .hero h1 { font-size: 30px; }
+  .hero-icon { width: 60px; height: 60px; border-radius: 14px; }
+  .flow { padding: 60px 24px; } .flow-diagram { flex-direction: column; }
+  .flow-arrow { transform: rotate(90deg); }
+  .preview-section { padding: 20px; } .sp { padding: 24px 20px; font-size: 11px; }
+  .fg { grid-template-columns: 1fr; }
+  .sl { grid-template-columns: 1fr; } .si:nth-child(even) { padding-left: 0; border-left: none; } .si:nth-child(odd) { padding-right: 0; }
+  .reader, .specs, .flow { padding-left: 24px; padding-right: 24px; }
+  .cta-final { padding: 80px 24px; }
+  footer { flex-direction: column; gap: 14px; align-items: flex-start; padding: 24px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">
+    <img src="persona-icon.png" alt="Persona">
+    <span class="logo-text">PERSONA</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#reader">Reader Mode</a></li>
+    <li><a href="#specs">Specs</a></li>
+    <li><a href="#download" class="btn btn-primary" style="padding:7px 18px;font-size:10px;">Get Persona</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <img src="persona-icon.png" alt="Persona" class="hero-icon">
+  <h1>Write first.<br><em>Format later.</em></h1>
+  <p class="hero-sub">A fast, native screenplay editor for macOS and iPad. Start your story in Persona, export to Final Draft when production calls. Full FDX compatibility. Zero distractions.</p>
+  <div class="hero-price">
+    <span class="price-old">$19.99</span> <span class="price-new">$9.99</span> intro price · Universal app
+  </div>
+  <div class="hero-actions">
+    <a href="#download" class="btn btn-primary">Download for macOS & iPad</a>
+    <a href="#features" class="btn btn-ghost">See what's inside</a>
+  </div>
+  <p class="hero-meta">macOS & iPadOS · Courier 12pt · FDX import & export · Reader Mode with annotations</p>
+</section>
+
+<!-- Workflow -->
+<section class="flow">
+  <h2>Persona is where the story starts. Final Draft is where it ships.</h2>
+
+  <div class="flow-diagram">
+    <div class="flow-step">
+      <div class="flow-step-label">Write</div>
+      <div class="flow-step-name accent">Persona</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="flow-step-label">Export</div>
+      <div class="flow-step-name">.fdx</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="flow-step-label">Production</div>
+      <div class="flow-step-name">Final Draft</div>
+    </div>
+  </div>
+
+  <p><strong>Persona doesn't replace Final Draft.</strong> Final Draft is the industry standard for production — script revisions, locked pages, production drafts. That's its job.</p>
+  <p>But when you're staring at an empty page at 2 AM, you don't need production tools. You need <strong>speed</strong>. You need auto-formatting that stays out of the way. You need a cursor that's ready the moment you open the app. You need to think about your story, not your software.</p>
+  <p>Write in Persona. Focus on the story. When the draft is ready, export .fdx and open it in Final Draft. Your formatting, your scenes, your page count — everything transfers perfectly.</p>
+</section>
+
+<!-- Preview -->
+<section class="preview-section">
+  <div class="sp">
+    <div class="sp-label">Persona</div>
+    <div class="slug">INT. EDITING ROOM - NIGHT</div>
+    <div class="action">The screen glows in the dark room. A cursor blinks on an empty page. She hasn't written a word in forty minutes. Not because she doesn't know what to write — because the software keeps getting in the way.</div>
+    <div class="action">She closes the dialog box. Opens a new app. Starts typing.</div>
+    <div class="char">ELENA</div>
+    <div class="dial"><span class="hl">This is better.</span><span class="cursor"></span></div>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="features" id="features">
+  <div class="features-hdr">What's inside</div>
+  <div class="fg">
+    <div class="f">
+      <div class="f-lab">Speed</div>
+      <h3>Tab. Enter. Write.</h3>
+      <p>Tab cycles elements. Enter creates the next logical element. Character names auto-complete. INT./EXT. pops up as you type. ⌘1-6 for direct element access. No mouse needed. Just flow.</p>
+    </div>
+    <div class="f">
+      <div class="f-lab">FDX</div>
+      <h3>Full Final Draft compatibility</h3>
+      <p>Import any .fdx — 100+ pages, all scene headings preserved. Export back for production. Your script coordinator will never ask what software you used. Seamless round-trip.</p>
+    </div>
+    <div class="f">
+      <div class="f-lab">Format</div>
+      <h3>Industry standard. Always.</h3>
+      <p>Courier 12pt. US Letter or A4. 1.5" binding margin. 54 lines per page. Auto-formatted as you type. Your page count matches Final Draft exactly.</p>
+    </div>
+    <div class="f">
+      <div class="f-lab">Focus</div>
+      <h3>The toolbar disappears</h3>
+      <p>Auto-hide toolbar. Dark mode with near-black canvas. The page is all you see. Distraction-free isn't a mode — it's the default. Hover or tap to bring controls back.</p>
+    </div>
+    <div class="f">
+      <div class="f-lab">Navigate</div>
+      <h3>Scene navigator sidebar</h3>
+      <p>Every scene heading, numbered, clickable. On a 100-page script, you're never lost. Click a scene, the document scrolls there instantly.</p>
+    </div>
+    <div class="f">
+      <div class="f-lab">Smart</div>
+      <h3>CONT'D and parentheticals</h3>
+      <p>Same character after action? (CONT'D) added automatically. Type ( after a name — O.S., V.O. popup. Time of day learns your entries. The app adapts to your writing.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Reader Mode -->
+<section class="reader" id="reader">
+  <h2>Reader Mode</h2>
+  <p>You're a director reading before a meeting. A producer reviewing the latest draft. A writer doing a cold read of your own work. You don't want to edit — you want to <strong>read and think</strong>.</p>
+  <p>⌘⇧R. The keyboard locks. Right-click any selection — a dedicated annotation menu appears. No Cut, no Paste, no Spelling. Just highlights, notes, and export.</p>
+
+  <div class="chips">
+    <span class="chip y">Yellow</span>
+    <span class="chip g">Green</span>
+    <span class="chip b">Blue</span>
+    <span class="chip pk">Pink</span>
+    <span class="chip pr">Purple</span>
+  </div>
+
+  <p>Select text, pick a color — instant highlight, like Apple Books. Add a note or just mark it and move on. Edit notes later. Clear one, or clear all. Everything saves in your .prs file. Come back next week, your annotations are exactly where you left them.</p>
+  <p>When you're done, export directly to <strong>Apple Notes</strong>. Every annotation grouped by scene, with the exact page number. Ready for the meeting.</p>
+</section>
+
+<!-- Specs -->
+<section class="specs" id="specs">
+  <div class="specs-hdr">Technical</div>
+  <div class="sl">
+    <div class="si"><div class="sk">Platform</div><div class="sv">Native macOS & iPadOS</div></div>
+    <div class="si"><div class="sk">Requirement</div><div class="sv">macOS 13+ / iPadOS 16+</div></div>
+    <div class="si"><div class="sk">File formats</div><div class="sv">.fdx, .prs (native), PDF export</div></div>
+    <div class="si"><div class="sk">Page size</div><div class="sv">US Letter and A4</div></div>
+    <div class="si"><div class="sk">Font</div><div class="sv">Courier New, Courier Prime, Menlo</div></div>
+    <div class="si"><div class="sk">Price</div><div class="sv">$9.99 intro / $19.99 · Universal app</div></div>
+    <div class="si"><div class="sk">Pagination</div><div class="sv">54 lines/page, industry-standard breaks</div></div>
+    <div class="si"><div class="sk">Launch</div><div class="sv">Instant. Last document loaded. Cursor ready.</div></div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-final" id="download">
+  <img src="persona-icon.png" alt="Persona" class="cta-icon">
+  <h2>Start writing.</h2>
+  <p>macOS & iPad. One purchase, both platforms.</p>
+  <div class="price-line"><span class="old">$19.99</span><span class="new">$9.99</span></div>
+  <div class="acts">
+    <a href="#" class="btn btn-primary">Download Persona</a>
+    <a href="https://github.com/alexandrubelc/persona" class="btn btn-ghost">View on GitHub</a>
+  </div>
+</section>
+
+<footer>
+  <div class="fl">Persona · Built by <a href="https://alexandrubelc.github.io" style="color:var(--text-muted);text-transform:none;letter-spacing:0;">Alexandru Belc</a> · Filmmaker</div>
+  <div class="fr">
+    <a href="https://github.com/alexandrubelc/persona">GitHub</a>
+    <a href="mailto:contact@alexandrubelc.com">Contact</a>
+  </div>
+</footer>
+
+</body>
+</html>
